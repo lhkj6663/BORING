@@ -3,37 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>这里改成你的文章标题</title>
+    <!-- 【改这里】把下面的文字换成你的文章标题，会显示在浏览器标签页上 -->
+    <title>给可爱美丽水蜜桃的一封信</title>
     <style>
         body {
+            /* 【改这里】背景色：目前是柔和的暖黄色，你可以换成任何颜色，比如 #ffffff 纯白、#f5f5f5 浅灰 */
+            background-color: #fdf6e3;
+            /* 文字颜色 */
+            color: #4a4a4a;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            max-width: 700px;
+            /* 文章内容最大宽度，保持阅读舒适 */
+            max-width: 750px;
+            /* 上下留白 */
             margin: 40px auto;
+            /* 左右内边距，防止手机上看贴边 */
             padding: 0 20px;
-            line-height: 2;
-            color: #333333;
-            background-color: #ffffff;
+            /* 行间距，2.2倍就是很宽松 */
+            line-height: 2.2;
+            /* 基础字号，略大一点方便阅读 */
+            font-size: 1.15em;
         }
-        h1 {
-            font-size: 2em;
-            margin-bottom: 1em;
+
+        /* 顶部大图样式 */
+        .banner-img {
+            width: 100%;
+            max-width: 750px;
+            display: block;
+            margin: 0 auto 2em auto;
+            /* 【改这里】圆角大小，8px是微圆角，想更圆可以改成16px或更多 */
+            border-radius: 8px;
+        }
+
+        /* 标题区域 */
+        header {
             text-align: center;
+            margin-bottom: 3em;
+            padding-bottom: 1em;
+            /* 标题下方的分隔线 */
+            border-bottom: 2px solid #eee;
         }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.2em;
+        }
+
+        header .meta {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        /* 正文段落 */
         p {
             margin-bottom: 1.5em;
-            font-size: 1.1em;
         }
-        /* 这可以让手机上看也清楚 */
+
+        /* 结尾横线 */
+        .ending-line {
+            margin-top: 3em;
+            border: none;
+            border-top: 1px solid #ddd;
+        }
+
+        /* 结尾文字 */
+        .ending-text {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
-    <h1>这里写你的文章主标题</h1>
-    <p>这是文章的第一段。把你的500字内容分成多个段落，每个段落都用一对 &lt;p&gt; 和 &lt;/p&gt; 包起来。这个标签叫“段落标签”，浏览器看到它就知道这是一段文字。</p>
-    
-    <p>这是文章的第二段。继续写你的内容，注意文字里如果包含英文引号或特殊符号，一般不用管。如果文章里有小标题，可以用 &lt;h2&gt; 标签，但用不上就全用 &lt;p&gt;。</p>
-    
-    <p>这是第三段。你只放一篇文章，就这样一段一段写完即可。例如你可以写上500字的故事、说明、诗歌等。段落之间会自动空行，阅读很舒服。</p>
-    
-    <p>这是第四段。就这样一直写到完。最后一段结束后，不需要加任何东西。</p>
+
+    <!-- 【改这里】如果你有自己的顶部图片，把图片文件（如 banner.jpg）上传到和 article.html 同一个仓库目录下，
+         然后把下面 src 里的 "banner.jpg" 换成你的图片文件名。如果暂时不用图片，直接删除下面这行即可 -->
+    <img class="banner-img" src="banner.jpg" alt="文章顶部配图">
+
+    <!-- 文章头部：标题、作者、时间 -->
+    <header>
+        <!-- 【改这里】换成你真正想用的文章大标题 -->
+        <h1>就此别过，再见于山海</h1>
+        <!-- 【改这里】换成你的署名和日期，或者直接删掉这一行 -->
+        <p class="meta">作者：摇子-小胖-彭煜翔 · 2026年8月</p>
+    </header>
+
+    <!-- 正文内容，每段都用 <p>...</p> 包起来 -->
+    <!-- 【改这里】在下面的 <p> 和 </p> 之间，写上你自己的文字。需要几段就复制几对 <p></p> -->
+    <p>还记得我之前说的想要给你一个惊喜吗？你可能已经忘了吧我感觉，毕竟桃姐的工作那么忙。但是我现在还是说一句对不起吧，毕竟本来想的是给你送一束花的再写几句话告别的，没想到吧？！不是你拿走的那个熊（嘻嘻）结果没想到最后的结果并不像想象之中的GOODENDING但是也算是我预料之中的结果吧，现在当你打开这篇文章的时候，我应该已经离开轨院了，我知道陈姐你是一个感性的人，其实我也算是，所以我思来想去，最后决定给你一个网站给你我之间短暂但是又漫长的亦师亦友的关系给一个节点标记，可不要忘了我。</p>
+
+    <p>说来也是过的真快哎，说实话第一次和你聊天就是通过吴帅霖现在看那个聊天记录真的感觉你像一个可爱的姐姐（聊天的时候真的还没有见过你）到后面也真是碰巧，我记得不错的话我应该就是通过做海报做背景和你认识的，后面返校也是通过做图什么的和你熟起来的，其实你给我的第一印象其实是挺暴躁的，但是后面才发现你的有时候的暴躁也算是你的事业心和对事情负责的态度，后面你给我的印象更多的有趣活泼，说实话我真的挺喜欢这样的老师的，长得还好看。</p>
+
+    <p>这是第三段。如果某一段特别短也不要紧，p 标签会自动处理。</p>
+
+    <p>这是第四段。可以一直添加下去，直到整篇文章结束。</p>
+
+    <!-- 文章结尾装饰 -->
+    <hr class="ending-line">
+    <!-- 【改这里】可以换成你想说的结束语，比如“— 期待你的回声 —” 或者直接删除 -->
+    <p class="ending-text">— 感谢阅读 —</p>
+
 </body>
 </html>
