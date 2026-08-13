@@ -24,6 +24,11 @@
             font-size: 1.15em;
         }
 
+        /* 内容容器：包住图片和所有文字，用于实现滚动渐隐效果 */
+        .content-wrapper {
+            position: relative;
+        }
+
         /* 顶部大图样式 */
         .banner-img {
             width: 100%;
@@ -32,9 +37,26 @@
             margin: 0 auto 2em auto;
             /* 【改这里】圆角大小，8px是微圆角，想更圆可以改成16px或更多 */
             border-radius: 8px;
-            /* 方案1：只保留透明度过渡，无 sticky 定位 */
-            transition: opacity 0.3s ease;
-            will-change: opacity;
+            /* 核心：使用粘性定位，让图片在滚动时固定在视口顶部 */
+            position: sticky;
+            top: 0;
+            z-index: 1; /* 图片在下层 */
+            /* 不需要 transition，透明度由 JS 实时控制，更平滑 */
+        }
+
+        /* 所有需要覆盖图片的内容元素都设置在上层，背景完全透明 */
+        header,
+        p,
+        .ending-line,
+        .ending-text {
+            position: relative;
+            z-index: 2; /* 内容在上层，盖住图片 */
+            background-color: transparent; /* 确保透明，不出现色块 */
+        }
+
+        /* 正文段落加粗，提高在图片上方阅读的清晰度 */
+        p {
+            font-weight: 500;
         }
 
         /* 标题区域 */
@@ -54,11 +76,7 @@
         header .meta {
             color: #999;
             font-size: 0.9em;
-        }
-
-        /* 正文段落 */
-        p {
-            margin-bottom: 1.5em;
+            font-weight: 400; /* 元信息不需要太粗 */
         }
 
         /* 结尾横线 */
@@ -76,12 +94,13 @@
             /* 控制行距 */
             line-height: 1.4;
             margin-bottom: 0.2em;
+            font-weight: 400; /* 结尾文字保持细体 */
         }
     </style>
 </head>
 <body>
 
-    <!-- 内容容器（只用于包裹，不再需要 special 定位） -->
+    <!-- 用内容容器包住所有可见内容，便于 JS 计算滚动位置 -->
     <div class="content-wrapper">
         <!-- 【改这里】如果你有自己的顶部图片，把图片文件（如 banner.jpg）上传到和 article.html 同一个仓库目录下，
              然后把下面 src 里的 "banner.jpg" 换成你的图片文件名。如果暂时不用图片，直接删除下面这行即可 -->
@@ -129,31 +148,55 @@
     // 获取图片元素和主标题元素
     const banner = document.getElementById('banner');
     const mainTitle = document.getElementById('main-title');
+    let ticking = false;
 
-    // 如果没有图片或标题就不执行（防止报错）
-    if (banner && mainTitle) {
-        // 监听页面滚动事件
-        window.addEventListener('scroll', function() {
-            // 获取主标题当前位置信息
-            const titleRect = mainTitle.getBoundingClientRect();
-            // 标题顶部距离视口顶部的距离
-            const titleTop = titleRect.top;
+    // 更新图片透明度的函数
+    function updateOpacity() {
+        if (!banner || !mainTitle) return;
 
-            // 设定：当标题顶部距离视口顶部小于 300px 时开始淡出
-            // 这个数值你可以根据喜好调整，数字越大淡出开始越早
-            const fadeStart = 300;
+        // 获取主标题当前位置信息
+        const titleRect = mainTitle.getBoundingClientRect();
+        const titleTop = titleRect.top; // 标题顶部距离视口顶部的距离
 
-            let opacity = 1; // 默认完全不透明
+        // 动态计算触发范围：从视口高度的60%处开始渐变
+        const viewportHeight = window.innerHeight;
+        const fadeStart = viewportHeight * 0.6;
 
-            if (titleTop < fadeStart) {
-                // 计算透明度：距离越近越透明，当 titleTop 为 0 时完全透明
-                opacity = Math.max(0, titleTop / fadeStart);
-            }
+        // 最终不透明度：手机端更淡，电脑端稍高
+        const finalOpacity = window.innerWidth < 768 ? 0.05 : 0.08;
 
-            // 应用透明度到图片上
-            banner.style.opacity = opacity;
-        });
+        let opacity = 1; // 初始完全不透明
+
+        if (titleTop < fadeStart) {
+            // 计算进度：从 fadeStart 到 0，进度从 1 到 0
+            const progress = Math.min(1, Math.max(0, titleTop / fadeStart));
+            // 透明度从 1 线性过渡到 finalOpacity
+            opacity = finalOpacity + (1 - finalOpacity) * progress;
+        }
+
+        // 应用透明度到图片上
+        banner.style.opacity = opacity;
+        ticking = false;
     }
+
+    // 滚动监听，使用 requestAnimationFrame 优化性能
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(updateOpacity);
+            ticking = true;
+        }
+    });
+
+    // 窗口大小变化时重新计算
+    window.addEventListener('resize', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(updateOpacity);
+            ticking = true;
+        }
+    });
+
+    // 页面加载时先执行一次，确保滚动位置不在顶部时图片透明度正确
+    updateOpacity();
 </script>
 </body>
 </html>
