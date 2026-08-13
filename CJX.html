@@ -24,6 +24,11 @@
             font-size: 1.15em;
         }
 
+        /* 内容容器：包住图片和所有文字，用于实现滚动渐隐效果 */
+        .content-wrapper {
+            position: relative;
+        }
+
         /* 顶部大图样式 */
         .banner-img {
             width: 100%;
@@ -32,8 +37,23 @@
             margin: 0 auto 2em auto;
             /* 【改这里】圆角大小，8px是微圆角，想更圆可以改成16px或更多 */
             border-radius: 8px;
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            will-change: opacity, transform;
+            /* 情况二核心：使用粘性定位，让图片在滚动时固定在视口顶部 */
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            /* 只保留透明度过渡，去掉位移动画 */
+            transition: opacity 0.3s ease;
+            will-change: opacity;
+        }
+
+        /* 给所有需要覆盖图片的内容元素设置背景和层级，让它们滚上来时能盖住图片 */
+        header,
+        p,
+        .ending-line,
+        .ending-text {
+            position: relative;
+            z-index: 2;
+            background-color: #fdf6e3; /* 必须与 body 背景色一致，才能完全盖住图片 */
         }
 
         /* 标题区域 */
@@ -72,88 +92,86 @@
             text-align: center;
             color: #aaa;
             font-size: 0.9em;
-    /* 下面两行是新增的 */
-            line-height: 1.4;        /* 控制每句话内部的行高，1.4倍比较紧凑 */
-            margin-bottom: 0.2em;    /* 控制两个段落之间的间距，0.2em就是很小 */
+            /* 下面两行是新增的，控制行距 */
+            line-height: 1.4;
+            margin-bottom: 0.2em;
        }
     </style>
 </head>
 <body>
 
-    <!-- 【改这里】如果你有自己的顶部图片，把图片文件（如 banner.jpg）上传到和 article.html 同一个仓库目录下，
-         然后把下面 src 里的 "banner.jpg" 换成你的图片文件名。如果暂时不用图片，直接删除下面这行即可 -->
-    <img class="banner-img" id="banner" src="DSC_1396.jpg" alt="">
+    <!-- 用内容容器包住所有可见内容，便于 JS 计算滚动位置 -->
+    <div class="content-wrapper">
+        <!-- 【改这里】如果你有自己的顶部图片，把图片文件（如 banner.jpg）上传到和 article.html 同一个仓库目录下，
+             然后把下面 src 里的 "banner.jpg" 换成你的图片文件名。如果暂时不用图片，直接删除下面这行即可 -->
+        <img class="banner-img" id="banner" src="DSC_1396.jpg" alt="顶部图片">
 
-    <!-- 文章头部：标题、作者、时间 -->
-    <header>
-        <!-- 【改这里】换成你真正想用的文章大标题 -->
-        <h1>就此别过，再见于山海</h1>
-        <!-- 【改这里】换成你的署名和日期，或者直接删掉这一行 -->
-        <p class="meta">作者：摇子-小胖-彭煜翔 · 2026年8月</p>
-    </header>
+        <!-- 文章头部：标题、作者、时间 -->
+        <header>
+            <!-- 【改这里】换成你真正想用的文章大标题 -->
+            <h1>就此别过，再见于山海</h1>
+            <!-- 【改这里】换成你的署名和日期，或者直接删掉这一行 -->
+            <p class="meta">作者：摇子-小胖-彭煜翔 · 2026年8月</p>
+        </header>
 
-    <!-- 正文内容，每段都用 <p>...</p> 包起来 -->
-    <!-- 【改这里】在下面的 <p> 和 </p> 之间，写上你自己的文字。需要几段就复制几对 <p></p> -->
-    <p>还记得我之前说的想要给你一个惊喜吗？你可能已经忘了吧我感觉，毕竟桃姐的工作那么忙。但是我现在还是说一句对不起吧，毕竟本来想的是给你送一束花的再写几句话告别的，没想到吧？！不是你拿走的那个熊😁（嘻嘻）结果没想到最后的结果并不像想象之中的GOODENDING但是也算是我预料之中的结果吧，现在当你打开这篇文章的时候，我应该已经离开轨院了，我知道陈姐你是一个感性的人，其实我也算是，所以我思来想去，最后决定给你一个网站给你我之间短暂但是又漫长的亦师亦友的关系给一个节点标记，可不要忘了我。</p>
+        <!-- 正文内容，每段都用 <p>...</p> 包起来 -->
+        <!-- 【改这里】在下面的 <p> 和 </p> 之间，写上你自己的文字。需要几段就复制几对 <p></p> -->
+        <p>还记得我之前说的想要给你一个惊喜吗？你可能已经忘了吧我感觉，毕竟桃姐的工作那么忙。但是我现在还是说一句对不起吧，毕竟本来想的是给你送一束花的再写几句话告别的，没想到吧？！不是你拿走的那个熊😁（嘻嘻）结果没想到最后的结果并不像想象之中的GOODENDING但是也算是我预料之中的结果吧，现在当你打开这篇文章的时候，我应该已经离开轨院了，我知道陈姐你是一个感性的人，其实我也算是，所以我思来想去，最后决定给你一个网站给你我之间短暂但是又漫长的亦师亦友的关系给一个节点标记，可不要忘了我。</p>
 
-    <p>说来也是过的真快哎，说实话第一次和你聊天就是通过吴帅霖现在看那个聊天记录真的感觉你像一个可爱的姐姐（聊天的时候真的还没有见过你）到后面也真是碰巧，我记得不错的话我应该就是通过做海报做背景和你认识的，后面返校也是通过做图什么的和你熟起来的，其实你给我的第一印象其实是挺暴躁的，但是后面才发现你的有时候的暴躁也算是你的事业心和对事情负责的态度，后面你给我的印象更多的有趣活泼，说实话我真的挺喜欢这样的老师的，长得还好看。</p>
+        <p>说来也是过的真快哎，说实话第一次和你聊天就是通过吴帅霖现在看那个聊天记录真的感觉你像一个可爱的姐姐（聊天的时候真的还没有见过你）到后面也真是碰巧，我记得不错的话我应该就是通过做海报做背景和你认识的，后面返校也是通过做图什么的和你熟起来的，其实你给我的第一印象其实是挺暴躁的，但是后面才发现你的有时候的暴躁也算是你的事业心和对事情负责的态度，后面你给我的印象更多的有趣活泼，说实话我真的挺喜欢这样的老师的，长得还好看。</p>
 
-    <p>回想再这大学的三年，不对🤔，算上这回算是4年了😂，过的是真快啊，我现在还记得当时我在报道那天的场景，这几年我真的很庆幸我选择了学生会这个大家庭，虽然可能加入的点不算早但是轨院的学生会真的给我留下了很深的印象，在这里我认识了好多人还有美丽可爱活泼的你，我也很感谢你在我去年年底的时候让我可以一直在宿舍住着，真的给我了好大的方便，我个人感觉比起师生我们在平时的相处更像是朋友，这一回我感觉是真的要说再见了，虽然我在写这一篇文章的时候并不知道我最后的面试是什么样的，希望这回是顺利的吧</p>
+        <p>回想再这大学的三年，不对🤔，算上这回算是4年了😂，过的是真快啊，我现在还记得当时我在报道那天的场景，这几年我真的很庆幸我选择了学生会这个大家庭，虽然可能加入的点不算早但是轨院的学生会真的给我留下了很深的印象，在这里我认识了好多人还有美丽可爱活泼的你，我也很感谢你在我去年年底的时候让我可以一直在宿舍住着，真的给我了好大的方便，我个人感觉比起师生我们在平时的相处更像是朋友，这一回我感觉是真的要说再见了，虽然我在写这一篇文章的时候并不知道我最后的面试是什么样的，希望这回是顺利的吧</p>
 
-    <p>说了这么多，也回忆了那么远，也很感谢你可以看到这里，如你知道的我的知识的储备并不算多我只能用最朴素的语言去描述你我之间这几年的相处</p>
+        <p>说了这么多，也回忆了那么远，也很感谢你可以看到这里，如你知道的我的知识的储备并不算多我只能用最朴素的语言去描述你我之间这几年的相处</p>
 
-    <p style="text-align: center;">新疆很大，河北很美</p>
+        <p style="text-align: center;">新疆很大，河北很美</p>
 
-    <p style="text-align: center;">美丽的陈小姐</p>
+        <p style="text-align: center;">美丽的陈小姐</p>
 
-    <p style="text-align: center;">我相信</p>
+        <p style="text-align: center;">我相信</p>
 
-    <p style="text-align: center;">我们可以在未来慢慢的时间长河之中</p>
+        <p style="text-align: center;">我们可以在未来慢慢的时间长河之中</p>
 
-    <p style="text-align: center;">越过山海</p>
+        <p style="text-align: center;">越过山海</p>
 
-    <p style="text-align: center;">再次相遇</p>
+        <p style="text-align: center;">再次相遇</p>
 
-    <!-- 文章结尾装饰 -->
-    <hr class="ending-line">
-    <!-- 【改这里】可以换成你想说的结束语，比如“— 期待你的回声 —” 或者直接删除 -->
-    <p class="ending-text">— By 2026届学生会最会摇的成员 —</p>
-    
-    <p class="ending-text">— 祝您天天开心事业蒸蒸日上少生气少操心别感冒—</p>
+        <!-- 文章结尾装饰 -->
+        <hr class="ending-line">
+        <!-- 【改这里】可以换成你想说的结束语，比如“— 期待你的回声 —” 或者直接删除 -->
+        <p class="ending-text">— By 2026届学生会最会摇的成员 —</p>
+        
+        <p class="ending-text">— 祝您天天开心事业蒸蒸日上少生气少操心别感冒—</p>
+    </div>
 
 <script>
-    // 获取图片元素
+    // 获取内容容器和图片元素
+    const wrapper = document.querySelector('.content-wrapper');
     const banner = document.getElementById('banner');
 
     // 监听页面滚动事件
     window.addEventListener('scroll', function() {
-        // 如果没有图片就不执行（防止报错）
-        if (!banner) return;
+        // 如果没有图片或容器就不执行（防止报错）
+        if (!wrapper || !banner) return;
 
-        // 获取图片当前位置信息
-        const rect = banner.getBoundingClientRect();
-        // 图片底部距离视口顶部的距离
-        const bottomDistance = rect.bottom;
+        // 获取内容容器当前位置信息（普通块，会随滚动移动）
+        const rect = wrapper.getBoundingClientRect();
+        // 容器底部距离视口顶部的距离
+        const wrapperBottom = rect.bottom;
 
-        // 设定：当图片底部距离视口顶部小于 300px 时开始淡出
-        // 这个数值你可以根据喜好调整，300px 意味着图片底部进入顶部 300px 区域就开始变淡
+        // 设定：当容器底部距离视口顶部小于 300px 时开始淡出
+        // 这个数值你可以根据喜好调整，数字越大淡出开始越早
         const fadeStart = 300;
 
         let opacity = 1; // 默认完全不透明
-        let translateY = 0; // 默认没有位移
 
-        if (bottomDistance < fadeStart) {
-            // 计算透明度：距离越近越透明
-            // bottomDistance 最小为 0（图片完全滚出视口顶部），此时 opacity 为 0
-            opacity = Math.max(0, bottomDistance / fadeStart);
-            // 同时让图片向上移动一点，制造“抽屉推进去”的感觉
-            // 移动距离与透明度成反比，最多上移 30px
-            translateY = -30 * (1 - opacity);
+        if (wrapperBottom < fadeStart) {
+            // 计算透明度：距离越近越透明，当 wrapperBottom 为 0 时完全透明
+            opacity = Math.max(0, wrapperBottom / fadeStart);
         }
 
-        // 应用样式
+        // 应用透明度到图片上（不再添加位移）
         banner.style.opacity = opacity;
-        banner.style.transform = 'translateY(' + translateY + 'px)';
     });
 </script>
 </body>
