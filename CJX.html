@@ -119,33 +119,37 @@
         function updateBanner() {
             if (!banner || !mainTitle) return;
 
-            const titleTop = mainTitle.getBoundingClientRect().top;
+            const titleTop = mainTitle.getBoundingClientRect().top; // 标题顶部距离视口顶部
             const bannerHeight = banner.offsetHeight;
             const gradientZone = 40; // 渐变过渡区宽度（约1厘米）
             const finalOpacity = 0.05; // 最终保留的不透明度
 
-            // 整体不透明度变化：当标题距离顶部小于 20% 视口高度时才开始下降
+            // 整体不透明度：当主标题接近顶部时才开始降低，避免闪一下
             const viewportHeight = window.innerHeight;
             const fadeStart = viewportHeight * 0.2;
             let opacity = 1;
             if (titleTop < fadeStart) {
                 const progress = Math.min(1, Math.max(0, titleTop / fadeStart));
-                // 使用更陡的曲线，让整体变淡主要发生在最后阶段
                 opacity = finalOpacity + (1 - finalOpacity) * (progress * progress);
             }
             banner.style.opacity = opacity;
 
-            // 计算 mask 渐变：从下到上，底部透明，顶部不透明
+            // 计算 mask 渐变：从顶部不透明到底部透明（从下向上透明扩散）
             let boundary = titleTop; // 主标题在图片上的位置（相对视口顶部）
             let maskImage;
+
             if (boundary >= bannerHeight) {
-                maskImage = 'linear-gradient(to top, black 0%, black 100%)';
+                // 主标题还在图片下方，图片完全显示
+                maskImage = 'linear-gradient(to bottom, black 0%, black 100%)';
             } else if (boundary <= 0) {
-                maskImage = 'linear-gradient(to top, transparent 0%, transparent 100%)';
+                // 主标题已到图片顶部或之上，图片完全透明（但整体 opacity 会保留最终可见度）
+                maskImage = 'linear-gradient(to bottom, transparent 0%, transparent 100%)';
             } else {
-                const transparentEnd = Math.max(0, boundary - gradientZone);
-                // 底部透明 -> 过渡 -> 顶部不透明
-                maskImage = 'linear-gradient(to top, transparent 0%, transparent ' + transparentEnd + 'px, black ' + boundary + 'px, black 100%)';
+                // 正常情况：主标题下方透明，上方保留不透明，中间有过渡
+                const transparentStart = boundary; // 从 boundary 到图片底部透明
+                const opaqueEnd = Math.max(0, boundary - gradientZone); // 不透明区域结束位置
+                // 顶部不透明 -> 过渡 -> 底部透明
+                maskImage = 'linear-gradient(to bottom, black 0%, black ' + opaqueEnd + 'px, transparent ' + transparentStart + 'px, transparent 100%)';
             }
 
             banner.style.maskImage = maskImage;
