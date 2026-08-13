@@ -24,11 +24,6 @@
             font-size: 1.15em;
         }
 
-        /* 内容容器：包住图片和所有文字，用于实现滚动渐隐效果 */
-        .content-wrapper {
-            position: relative;
-        }
-
         /* 顶部大图样式 */
         .banner-img {
             width: 100%;
@@ -37,23 +32,9 @@
             margin: 0 auto 2em auto;
             /* 【改这里】圆角大小，8px是微圆角，想更圆可以改成16px或更多 */
             border-radius: 8px;
-            /* 情况二核心：使用粘性定位，让图片在滚动时固定在视口顶部 */
-            position: sticky;
-            top: 0;
-            z-index: 1;
-            /* 只保留透明度过渡，去掉位移动画 */
+            /* 方案1：只保留透明度过渡，无 sticky 定位 */
             transition: opacity 0.3s ease;
             will-change: opacity;
-        }
-
-        /* 给所有需要覆盖图片的内容元素设置背景和层级，让它们滚上来时能盖住图片 */
-        header,
-        p,
-        .ending-line,
-        .ending-text {
-            position: relative;
-            z-index: 2;
-            background-color: #fdf6e3; /* 必须与 body 背景色一致，才能完全盖住图片 */
         }
 
         /* 标题区域 */
@@ -88,19 +69,19 @@
         }
 
         /* 结尾文字 */
-       .ending-text {
+        .ending-text {
             text-align: center;
             color: #aaa;
             font-size: 0.9em;
-            /* 下面两行是新增的，控制行距 */
+            /* 控制行距 */
             line-height: 1.4;
             margin-bottom: 0.2em;
-       }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 用内容容器包住所有可见内容，便于 JS 计算滚动位置 -->
+    <!-- 内容容器（只用于包裹，不再需要 special 定位） -->
     <div class="content-wrapper">
         <!-- 【改这里】如果你有自己的顶部图片，把图片文件（如 banner.jpg）上传到和 article.html 同一个仓库目录下，
              然后把下面 src 里的 "banner.jpg" 换成你的图片文件名。如果暂时不用图片，直接删除下面这行即可 -->
@@ -109,7 +90,7 @@
         <!-- 文章头部：标题、作者、时间 -->
         <header>
             <!-- 【改这里】换成你真正想用的文章大标题 -->
-            <h1>就此别过，再见于山海</h1>
+            <h1 id="main-title">就此别过，再见于山海</h1>
             <!-- 【改这里】换成你的署名和日期，或者直接删掉这一行 -->
             <p class="meta">作者：摇子-小胖-彭煜翔 · 2026年8月</p>
         </header>
@@ -145,34 +126,34 @@
     </div>
 
 <script>
-    // 获取内容容器和图片元素
-    const wrapper = document.querySelector('.content-wrapper');
+    // 获取图片元素和主标题元素
     const banner = document.getElementById('banner');
+    const mainTitle = document.getElementById('main-title');
 
-    // 监听页面滚动事件
-    window.addEventListener('scroll', function() {
-        // 如果没有图片或容器就不执行（防止报错）
-        if (!wrapper || !banner) return;
+    // 如果没有图片或标题就不执行（防止报错）
+    if (banner && mainTitle) {
+        // 监听页面滚动事件
+        window.addEventListener('scroll', function() {
+            // 获取主标题当前位置信息
+            const titleRect = mainTitle.getBoundingClientRect();
+            // 标题顶部距离视口顶部的距离
+            const titleTop = titleRect.top;
 
-        // 获取内容容器当前位置信息（普通块，会随滚动移动）
-        const rect = wrapper.getBoundingClientRect();
-        // 容器底部距离视口顶部的距离
-        const wrapperBottom = rect.bottom;
+            // 设定：当标题顶部距离视口顶部小于 300px 时开始淡出
+            // 这个数值你可以根据喜好调整，数字越大淡出开始越早
+            const fadeStart = 300;
 
-        // 设定：当容器底部距离视口顶部小于 300px 时开始淡出
-        // 这个数值你可以根据喜好调整，数字越大淡出开始越早
-        const fadeStart = 300;
+            let opacity = 1; // 默认完全不透明
 
-        let opacity = 1; // 默认完全不透明
+            if (titleTop < fadeStart) {
+                // 计算透明度：距离越近越透明，当 titleTop 为 0 时完全透明
+                opacity = Math.max(0, titleTop / fadeStart);
+            }
 
-        if (wrapperBottom < fadeStart) {
-            // 计算透明度：距离越近越透明，当 wrapperBottom 为 0 时完全透明
-            opacity = Math.max(0, wrapperBottom / fadeStart);
-        }
-
-        // 应用透明度到图片上（不再添加位移）
-        banner.style.opacity = opacity;
-    });
+            // 应用透明度到图片上
+            banner.style.opacity = opacity;
+        });
+    }
 </script>
 </body>
 </html>
