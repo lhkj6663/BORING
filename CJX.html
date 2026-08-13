@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 【改这里】浏览器标签页标题 -->
     <title>给可爱美丽水蜜桃的一封信</title>
     <style>
         body {
-            /* 【改这里】背景色：柔和的暖黄色，可换成任意颜色 */
             background-color: #fdf6e3;
             color: #4a4a4a;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -18,42 +16,35 @@
             font-size: 1.15em;
         }
 
-        /* 内容容器 */
         .content-wrapper {
             position: relative;
         }
 
-        /* 顶部大图样式 */
         .banner-img {
             width: 100%;
             max-width: 750px;
             display: block;
             margin: 0 auto 2em auto;
             border-radius: 8px;
-            /* 核心：粘性定位，让图片固定在视口顶部 */
             position: sticky;
             top: 0;
-            z-index: 1; /* 图片在下层 */
-            /* 不添加 transition，透明度由 JS 每帧实时控制 */
+            z-index: 1;
         }
 
-        /* 所有内容都在上层，背景完全透明 */
         header,
         p,
         .ending-line,
         .ending-text {
             position: relative;
             z-index: 2;
-            background-color: transparent; /* 完全透明，不出现色块 */
+            background-color: transparent;
         }
 
-        /* 正文段落：加粗并添加非常轻的白色阴影，保证在图片上方可读 */
         p {
             font-weight: 500;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.65);
         }
 
-        /* 标题区域 */
         header {
             text-align: center;
             margin-bottom: 3em;
@@ -70,18 +61,16 @@
         header .meta {
             color: #999;
             font-size: 0.9em;
-            font-weight: 400; /* 元信息保持细体 */
+            font-weight: 400;
             text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         }
 
-        /* 结尾横线 */
         .ending-line {
             margin-top: 3em;
             border: none;
             border-top: 1px solid #ddd;
         }
 
-        /* 结尾文字 */
         .ending-text {
             text-align: center;
             color: #aaa;
@@ -94,20 +83,14 @@
     </style>
 </head>
 <body>
-
     <div class="content-wrapper">
-        <!-- 【改这里】图片路径，确保图片与 HTML 同目录 -->
         <img class="banner-img" id="banner" src="DSC_1396.jpg" alt="顶部图片">
 
-        <!-- 文章头部 -->
         <header>
-            <!-- 【改这里】主标题 -->
             <h1 id="main-title">就此别过，再见于山海</h1>
-            <!-- 【改这里】作者和日期 -->
             <p class="meta">作者：摇子-小胖-彭煜翔 · 2026年8月</p>
         </header>
 
-        <!-- 正文内容 -->
         <p>还记得我之前说的想要给你一个惊喜吗？你可能已经忘了吧我感觉，毕竟桃姐的工作那么忙。但是我现在还是说一句对不起吧，毕竟本来想的是给你送一束花的再写几句话告别的，没想到吧？！不是你拿走的那个熊😁（嘻嘻）结果没想到最后的结果并不像想象之中的GOODENDING但是也算是我预料之中的结果吧，现在当你打开这篇文章的时候，我应该已经离开轨院了，我知道陈姐你是一个感性的人，其实我也算是，所以我思来想去，最后决定给你一个网站给你我之间短暂但是又漫长的亦师亦友的关系给一个节点标记，可不要忘了我。</p>
 
         <p>说来也是过的真快哎，说实话第一次和你聊天就是通过吴帅霖现在看那个聊天记录真的感觉你像一个可爱的姐姐（聊天的时候真的还没有见过你）到后面也真是碰巧，我记得不错的话我应该就是通过做海报做背景和你认识的，后面返校也是通过做图什么的和你熟起来的，其实你给我的第一印象其实是挺暴躁的，但是后面才发现你的有时候的暴躁也算是你的事业心和对事情负责的态度，后面你给我的印象更多的有趣活泼，说实话我真的挺喜欢这样的老师的，长得还好看。</p>
@@ -117,82 +100,60 @@
         <p>说了这么多，也回忆了那么远，也很感谢你可以看到这里，如你知道的我的知识的储备并不算多我只能用最朴素的语言去描述你我之间这几年的相处</p>
 
         <p style="text-align: center;">新疆很大，河北很美</p>
-
         <p style="text-align: center;">美丽的陈小姐</p>
-
         <p style="text-align: center;">我相信</p>
-
         <p style="text-align: center;">我们可以在未来慢慢的时间长河之中</p>
-
         <p style="text-align: center;">越过山海</p>
-
         <p style="text-align: center;">再次相遇</p>
 
-        <!-- 结尾装饰 -->
         <hr class="ending-line">
         <p class="ending-text">— By 2026届学生会最会摇的成员 —</p>
-        
         <p class="ending-text">— 祝您天天开心事业蒸蒸日上少生气少操心别感冒—</p>
     </div>
 
     <script>
-        // 获取图片和主标题元素
         const banner = document.getElementById('banner');
         const mainTitle = document.getElementById('main-title');
         let ticking = false;
 
-        // 更新图片遮罩和整体透明度
         function updateBanner() {
             if (!banner || !mainTitle) return;
 
-            // 主标题顶部距离视口顶部的距离
             const titleTop = mainTitle.getBoundingClientRect().top;
-
-            // 图片当前高度（用于判断主标题是否在图片内部）
             const bannerHeight = banner.offsetHeight;
+            const gradientZone = 40; // 渐变过渡区宽度（约1厘米）
+            const finalOpacity = 0.05; // 最终保留的不透明度
 
-            // 渐变过渡区宽度：约 1 厘米 ≈ 40px
-            const gradientZone = 40;
-
-            // 最终整体不透明度（保留 5%）
-            const finalOpacity = 0.05;
-
-            // 计算整体不透明度：从主标题距离顶部 60% 视口高度开始下降，到顶部时降到 finalOpacity
+            // 整体不透明度变化：当标题距离顶部小于 20% 视口高度时才开始下降
             const viewportHeight = window.innerHeight;
-            const fadeStart = viewportHeight * 0.6;
+            const fadeStart = viewportHeight * 0.2;
             let opacity = 1;
             if (titleTop < fadeStart) {
                 const progress = Math.min(1, Math.max(0, titleTop / fadeStart));
-                opacity = finalOpacity + (1 - finalOpacity) * progress;
+                // 使用更陡的曲线，让整体变淡主要发生在最后阶段
+                opacity = finalOpacity + (1 - finalOpacity) * (progress * progress);
             }
             banner.style.opacity = opacity;
 
-            // 计算 mask 渐变分界点：主标题相对于图片顶部的偏移
-            // 图片 sticky 顶部固定在视口 0，因此 titleTop 即为相对图片顶部的偏移（若 titleTop 在 0 到 bannerHeight 之间）
-            let boundary = titleTop; // 主标题在图片上的位置
-
+            // 计算 mask 渐变：从下到上，底部透明，顶部不透明
+            let boundary = titleTop; // 主标题在图片上的位置（相对视口顶部）
             let maskImage;
             if (boundary >= bannerHeight) {
-                // 主标题还在图片下方，图片完全不透明
                 maskImage = 'linear-gradient(to top, black 0%, black 100%)';
             } else if (boundary <= 0) {
-                // 主标题已滚到图片顶部之上，图片完全透明（但整体 opacity 会保留 5%）
                 maskImage = 'linear-gradient(to top, transparent 0%, transparent 100%)';
             } else {
-                // 正常情况：主标题下方透明，上方1厘米过渡，再上方不透明
-                // 从底部到 boundary - gradientZone 处透明，到 boundary 处从不透明过渡到完全透明
                 const transparentEnd = Math.max(0, boundary - gradientZone);
+                // 底部透明 -> 过渡 -> 顶部不透明
                 maskImage = 'linear-gradient(to top, transparent 0%, transparent ' + transparentEnd + 'px, black ' + boundary + 'px, black 100%)';
             }
 
-            // 应用 mask（包括标准属性和 -webkit- 前缀）
             banner.style.maskImage = maskImage;
             banner.style.webkitMaskImage = maskImage;
 
             ticking = false;
         }
 
-        // 滚动监听，使用 requestAnimationFrame 优化
         window.addEventListener('scroll', function() {
             if (!ticking) {
                 window.requestAnimationFrame(updateBanner);
@@ -200,7 +161,6 @@
             }
         });
 
-        // 窗口大小变化时重新计算
         window.addEventListener('resize', function() {
             if (!ticking) {
                 window.requestAnimationFrame(updateBanner);
@@ -208,7 +168,6 @@
             }
         });
 
-        // 页面加载时执行一次
         updateBanner();
     </script>
 </body>
