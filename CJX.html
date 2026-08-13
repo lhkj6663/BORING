@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 【改这里】浏览器标签页标题 -->
     <title>给可爱美丽水蜜桃的一封信</title>
     <style>
         body {
@@ -20,6 +21,7 @@
             position: relative;
         }
 
+        /* 顶部大图 */
         .banner-img {
             width: 100%;
             max-width: 750px;
@@ -29,8 +31,10 @@
             position: sticky;
             top: 0;
             z-index: 1;
+            /* 不设置 transition，透明度由 JS 实时控制 */
         }
 
+        /* 内容元素在上层，背景完全透明 */
         header,
         p,
         .ending-line,
@@ -40,6 +44,7 @@
             background-color: transparent;
         }
 
+        /* 正文段落：加粗 + 轻量白色阴影 */
         p {
             font-weight: 500;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.65);
@@ -84,7 +89,8 @@
 </head>
 <body>
     <div class="content-wrapper">
-        <img class="banner-img" id="banner" src="DSC_1396.webp?v=2" alt="顶部图片">
+        <!-- 【改这里】图片路径，确保图片与 HTML 同目录 -->
+        <img class="banner-img" id="banner" src="DSC_1396.jpg" alt="顶部图片">
 
         <header>
             <h1 id="main-title">就此别过，再见于山海</h1>
@@ -119,12 +125,13 @@
         function updateBanner() {
             if (!banner || !mainTitle) return;
 
-            const titleTop = mainTitle.getBoundingClientRect().top; // 标题顶部距离视口顶部
+            const titleTop = mainTitle.getBoundingClientRect().top; // 主标题顶部距离视口顶部
             const bannerHeight = banner.offsetHeight;
-            const gradientZone = 40; // 渐变过渡区宽度（约1厘米）
-            const finalOpacity = 0.05; // 最终保留的不透明度
+            const gradientZone = 40;        // 渐变过渡区宽度（约1厘米）
+            const bottomFadeZone = 40;      // 最终底部1厘米渐变区宽度
+            const finalOpacity = 0.05;      // 最终保留的不透明度（5%）
 
-            // 整体不透明度：当主标题接近顶部时才开始降低，避免闪一下
+            // 1. 整体不透明度：当主标题接近顶部（20%屏幕高度）时开始下降，到顶部时降为0.05
             const viewportHeight = window.innerHeight;
             const fadeStart = viewportHeight * 0.2;
             let opacity = 1;
@@ -134,22 +141,22 @@
             }
             banner.style.opacity = opacity;
 
-            // 计算 mask 渐变：从顶部不透明到底部透明（从下向上透明扩散）
+            // 2. 空间渐变 mask
             let boundary = titleTop; // 主标题在图片上的位置（相对视口顶部）
             let maskImage;
 
             if (boundary >= bannerHeight) {
-                // 主标题还在图片下方，图片完全显示
+                // 主标题在图片下方，图片完全显示
                 maskImage = 'linear-gradient(to bottom, black 0%, black 100%)';
-            } else if (boundary <= 0) {
-                // 主标题已到图片顶部或之上，图片完全透明（但整体 opacity 会保留最终可见度）
-                maskImage = 'linear-gradient(to bottom, transparent 0%, transparent 100%)';
-            } else {
-                // 正常情况：主标题下方透明，上方保留不透明，中间有过渡
-                const transparentStart = boundary; // 从 boundary 到图片底部透明
-                const opaqueEnd = Math.max(0, boundary - gradientZone); // 不透明区域结束位置
-                // 顶部不透明 -> 过渡 -> 底部透明
+            } else if (boundary > 0) {
+                // 主标题在图片内部：下方透明，上方不透明，中间有过渡
+                const opaqueEnd = Math.max(0, boundary - gradientZone);
+                const transparentStart = boundary;
                 maskImage = 'linear-gradient(to bottom, black 0%, black ' + opaqueEnd + 'px, transparent ' + transparentStart + 'px, transparent 100%)';
+            } else {
+                // 主标题到达或超过图片顶部：整体不透明度已降为0.05，
+                // 此时底部1厘米内从完全透明渐变到不透明，上方保持不透明（即保留5%的淡影）
+                maskImage = 'linear-gradient(to top, transparent 0%, black ' + bottomFadeZone + 'px, black 100%)';
             }
 
             banner.style.maskImage = maskImage;
@@ -172,7 +179,7 @@
             }
         });
 
-        updateBanner();
+        updateBanner(); // 初始化
     </script>
 </body>
 </html>
