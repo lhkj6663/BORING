@@ -32,6 +32,8 @@
             margin: 0 auto 2em auto;
             /* 【改这里】圆角大小，8px是微圆角，想更圆可以改成16px或更多 */
             border-radius: 8px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            will-change: opacity, transform;
         }
 
         /* 标题区域 */
@@ -80,7 +82,7 @@
 
     <!-- 【改这里】如果你有自己的顶部图片，把图片文件（如 banner.jpg）上传到和 article.html 同一个仓库目录下，
          然后把下面 src 里的 "banner.jpg" 换成你的图片文件名。如果暂时不用图片，直接删除下面这行即可 -->
-    <img class="banner-img" src="DSC_1396.jpg" alt="">
+    <img class="banner-img" id="banner" src="DSC_1396.jpg" alt="">
 
     <!-- 文章头部：标题、作者、时间 -->
     <header>
@@ -119,6 +121,40 @@
     
     <p class="ending-text">— 祝您天天开心事业蒸蒸日上少生气少操心别感冒—</p>
 
+<script>
+    // 获取图片元素
+    const banner = document.getElementById('banner');
 
+    // 监听页面滚动事件
+    window.addEventListener('scroll', function() {
+        // 如果没有图片就不执行（防止报错）
+        if (!banner) return;
+
+        // 获取图片当前位置信息
+        const rect = banner.getBoundingClientRect();
+        // 图片底部距离视口顶部的距离
+        const bottomDistance = rect.bottom;
+
+        // 设定：当图片底部距离视口顶部小于 300px 时开始淡出
+        // 这个数值你可以根据喜好调整，300px 意味着图片底部进入顶部 300px 区域就开始变淡
+        const fadeStart = 300;
+
+        let opacity = 1; // 默认完全不透明
+        let translateY = 0; // 默认没有位移
+
+        if (bottomDistance < fadeStart) {
+            // 计算透明度：距离越近越透明
+            // bottomDistance 最小为 0（图片完全滚出视口顶部），此时 opacity 为 0
+            opacity = Math.max(0, bottomDistance / fadeStart);
+            // 同时让图片向上移动一点，制造“抽屉推进去”的感觉
+            // 移动距离与透明度成反比，最多上移 30px
+            translateY = -30 * (1 - opacity);
+        }
+
+        // 应用样式
+        banner.style.opacity = opacity;
+        banner.style.transform = 'translateY(' + translateY + 'px)';
+    });
+</script>
 </body>
 </html>
