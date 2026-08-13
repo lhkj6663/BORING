@@ -3,28 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 【改这里】把下面的文字换成你的文章标题，会显示在浏览器标签页上 -->
+    <!-- 【改这里】浏览器标签页标题 -->
     <title>给可爱美丽水蜜桃的一封信</title>
     <style>
         body {
-            /* 【改这里】背景色：目前是柔和的暖黄色，你可以换成任何颜色，比如 #ffffff 纯白、#f5f5f5 浅灰 */
+            /* 【改这里】背景色：柔和的暖黄色，可换成任意颜色 */
             background-color: #fdf6e3;
-            /* 文字颜色 */
             color: #4a4a4a;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            /* 文章内容最大宽度，保持阅读舒适 */
             max-width: 750px;
-            /* 上下留白 */
             margin: 40px auto;
-            /* 左右内边距，防止手机上看贴边 */
             padding: 0 20px;
-            /* 行间距，2.2倍就是很宽松 */
             line-height: 2.2;
-            /* 基础字号，略大一点方便阅读 */
             font-size: 1.15em;
         }
 
-        /* 内容容器：包住图片和所有文字，用于实现滚动渐隐效果 */
+        /* 内容容器 */
         .content-wrapper {
             position: relative;
         }
@@ -35,28 +29,28 @@
             max-width: 750px;
             display: block;
             margin: 0 auto 2em auto;
-            /* 【改这里】圆角大小，8px是微圆角，想更圆可以改成16px或更多 */
             border-radius: 8px;
-            /* 核心：使用粘性定位，让图片在滚动时固定在视口顶部 */
+            /* 核心：粘性定位，让图片固定在视口顶部 */
             position: sticky;
             top: 0;
             z-index: 1; /* 图片在下层 */
-            /* 不需要 transition，透明度由 JS 实时控制，更平滑 */
+            /* 不添加 transition，透明度由 JS 每帧实时控制 */
         }
 
-        /* 所有需要覆盖图片的内容元素都设置在上层，背景完全透明 */
+        /* 所有内容都在上层，背景完全透明 */
         header,
         p,
         .ending-line,
         .ending-text {
             position: relative;
-            z-index: 2; /* 内容在上层，盖住图片 */
-            background-color: transparent; /* 确保透明，不出现色块 */
+            z-index: 2;
+            background-color: transparent; /* 完全透明，不出现色块 */
         }
 
-        /* 正文段落加粗，提高在图片上方阅读的清晰度 */
+        /* 正文段落：加粗并添加非常轻的白色阴影，保证在图片上方可读 */
         p {
             font-weight: 500;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.65);
         }
 
         /* 标题区域 */
@@ -64,19 +58,20 @@
             text-align: center;
             margin-bottom: 3em;
             padding-bottom: 1em;
-            /* 标题下方的分隔线 */
             border-bottom: 2px solid #eee;
         }
 
         header h1 {
             font-size: 2.5em;
             margin-bottom: 0.2em;
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
         }
 
         header .meta {
             color: #999;
             font-size: 0.9em;
-            font-weight: 400; /* 元信息不需要太粗 */
+            font-weight: 400; /* 元信息保持细体 */
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         }
 
         /* 结尾横线 */
@@ -91,31 +86,28 @@
             text-align: center;
             color: #aaa;
             font-size: 0.9em;
-            /* 控制行距 */
             line-height: 1.4;
             margin-bottom: 0.2em;
-            font-weight: 400; /* 结尾文字保持细体 */
+            font-weight: 400;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         }
     </style>
 </head>
 <body>
 
-    <!-- 用内容容器包住所有可见内容，便于 JS 计算滚动位置 -->
     <div class="content-wrapper">
-        <!-- 【改这里】如果你有自己的顶部图片，把图片文件（如 banner.jpg）上传到和 article.html 同一个仓库目录下，
-             然后把下面 src 里的 "banner.jpg" 换成你的图片文件名。如果暂时不用图片，直接删除下面这行即可 -->
+        <!-- 【改这里】图片路径，确保图片与 HTML 同目录 -->
         <img class="banner-img" id="banner" src="DSC_1396.jpg" alt="顶部图片">
 
-        <!-- 文章头部：标题、作者、时间 -->
+        <!-- 文章头部 -->
         <header>
-            <!-- 【改这里】换成你真正想用的文章大标题 -->
+            <!-- 【改这里】主标题 -->
             <h1 id="main-title">就此别过，再见于山海</h1>
-            <!-- 【改这里】换成你的署名和日期，或者直接删掉这一行 -->
+            <!-- 【改这里】作者和日期 -->
             <p class="meta">作者：摇子-小胖-彭煜翔 · 2026年8月</p>
         </header>
 
-        <!-- 正文内容，每段都用 <p>...</p> 包起来 -->
-        <!-- 【改这里】在下面的 <p> 和 </p> 之间，写上你自己的文字。需要几段就复制几对 <p></p> -->
+        <!-- 正文内容 -->
         <p>还记得我之前说的想要给你一个惊喜吗？你可能已经忘了吧我感觉，毕竟桃姐的工作那么忙。但是我现在还是说一句对不起吧，毕竟本来想的是给你送一束花的再写几句话告别的，没想到吧？！不是你拿走的那个熊😁（嘻嘻）结果没想到最后的结果并不像想象之中的GOODENDING但是也算是我预料之中的结果吧，现在当你打开这篇文章的时候，我应该已经离开轨院了，我知道陈姐你是一个感性的人，其实我也算是，所以我思来想去，最后决定给你一个网站给你我之间短暂但是又漫长的亦师亦友的关系给一个节点标记，可不要忘了我。</p>
 
         <p>说来也是过的真快哎，说实话第一次和你聊天就是通过吴帅霖现在看那个聊天记录真的感觉你像一个可爱的姐姐（聊天的时候真的还没有见过你）到后面也真是碰巧，我记得不错的话我应该就是通过做海报做背景和你认识的，后面返校也是通过做图什么的和你熟起来的，其实你给我的第一印象其实是挺暴躁的，但是后面才发现你的有时候的暴躁也算是你的事业心和对事情负责的态度，后面你给我的印象更多的有趣活泼，说实话我真的挺喜欢这样的老师的，长得还好看。</p>
@@ -136,67 +128,88 @@
 
         <p style="text-align: center;">再次相遇</p>
 
-        <!-- 文章结尾装饰 -->
+        <!-- 结尾装饰 -->
         <hr class="ending-line">
-        <!-- 【改这里】可以换成你想说的结束语，比如“— 期待你的回声 —” 或者直接删除 -->
         <p class="ending-text">— By 2026届学生会最会摇的成员 —</p>
         
         <p class="ending-text">— 祝您天天开心事业蒸蒸日上少生气少操心别感冒—</p>
     </div>
 
-<script>
-    // 获取图片元素和主标题元素
-    const banner = document.getElementById('banner');
-    const mainTitle = document.getElementById('main-title');
-    let ticking = false;
+    <script>
+        // 获取图片和主标题元素
+        const banner = document.getElementById('banner');
+        const mainTitle = document.getElementById('main-title');
+        let ticking = false;
 
-    // 更新图片透明度的函数
-    function updateOpacity() {
-        if (!banner || !mainTitle) return;
+        // 更新图片遮罩和整体透明度
+        function updateBanner() {
+            if (!banner || !mainTitle) return;
 
-        // 获取主标题当前位置信息
-        const titleRect = mainTitle.getBoundingClientRect();
-        const titleTop = titleRect.top; // 标题顶部距离视口顶部的距离
+            // 主标题顶部距离视口顶部的距离
+            const titleTop = mainTitle.getBoundingClientRect().top;
 
-        // 动态计算触发范围：从视口高度的60%处开始渐变
-        const viewportHeight = window.innerHeight;
-        const fadeStart = viewportHeight * 0.6;
+            // 图片当前高度（用于判断主标题是否在图片内部）
+            const bannerHeight = banner.offsetHeight;
 
-        // 最终不透明度：手机端更淡，电脑端稍高
-        const finalOpacity = window.innerWidth < 768 ? 0.05 : 0.08;
+            // 渐变过渡区宽度：约 1 厘米 ≈ 40px
+            const gradientZone = 40;
 
-        let opacity = 1; // 初始完全不透明
+            // 最终整体不透明度（保留 5%）
+            const finalOpacity = 0.05;
 
-        if (titleTop < fadeStart) {
-            // 计算进度：从 fadeStart 到 0，进度从 1 到 0
-            const progress = Math.min(1, Math.max(0, titleTop / fadeStart));
-            // 透明度从 1 线性过渡到 finalOpacity
-            opacity = finalOpacity + (1 - finalOpacity) * progress;
+            // 计算整体不透明度：从主标题距离顶部 60% 视口高度开始下降，到顶部时降到 finalOpacity
+            const viewportHeight = window.innerHeight;
+            const fadeStart = viewportHeight * 0.6;
+            let opacity = 1;
+            if (titleTop < fadeStart) {
+                const progress = Math.min(1, Math.max(0, titleTop / fadeStart));
+                opacity = finalOpacity + (1 - finalOpacity) * progress;
+            }
+            banner.style.opacity = opacity;
+
+            // 计算 mask 渐变分界点：主标题相对于图片顶部的偏移
+            // 图片 sticky 顶部固定在视口 0，因此 titleTop 即为相对图片顶部的偏移（若 titleTop 在 0 到 bannerHeight 之间）
+            let boundary = titleTop; // 主标题在图片上的位置
+
+            let maskImage;
+            if (boundary >= bannerHeight) {
+                // 主标题还在图片下方，图片完全不透明
+                maskImage = 'linear-gradient(to top, black 0%, black 100%)';
+            } else if (boundary <= 0) {
+                // 主标题已滚到图片顶部之上，图片完全透明（但整体 opacity 会保留 5%）
+                maskImage = 'linear-gradient(to top, transparent 0%, transparent 100%)';
+            } else {
+                // 正常情况：主标题下方透明，上方1厘米过渡，再上方不透明
+                // 从底部到 boundary - gradientZone 处透明，到 boundary 处从不透明过渡到完全透明
+                const transparentEnd = Math.max(0, boundary - gradientZone);
+                maskImage = 'linear-gradient(to top, transparent 0%, transparent ' + transparentEnd + 'px, black ' + boundary + 'px, black 100%)';
+            }
+
+            // 应用 mask（包括标准属性和 -webkit- 前缀）
+            banner.style.maskImage = maskImage;
+            banner.style.webkitMaskImage = maskImage;
+
+            ticking = false;
         }
 
-        // 应用透明度到图片上
-        banner.style.opacity = opacity;
-        ticking = false;
-    }
+        // 滚动监听，使用 requestAnimationFrame 优化
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                window.requestAnimationFrame(updateBanner);
+                ticking = true;
+            }
+        });
 
-    // 滚动监听，使用 requestAnimationFrame 优化性能
-    window.addEventListener('scroll', function() {
-        if (!ticking) {
-            window.requestAnimationFrame(updateOpacity);
-            ticking = true;
-        }
-    });
+        // 窗口大小变化时重新计算
+        window.addEventListener('resize', function() {
+            if (!ticking) {
+                window.requestAnimationFrame(updateBanner);
+                ticking = true;
+            }
+        });
 
-    // 窗口大小变化时重新计算
-    window.addEventListener('resize', function() {
-        if (!ticking) {
-            window.requestAnimationFrame(updateOpacity);
-            ticking = true;
-        }
-    });
-
-    // 页面加载时先执行一次，确保滚动位置不在顶部时图片透明度正确
-    updateOpacity();
-</script>
+        // 页面加载时执行一次
+        updateBanner();
+    </script>
 </body>
 </html>
