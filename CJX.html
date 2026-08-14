@@ -53,33 +53,23 @@
             position: relative;
             width: 85%;
             max-width: 520px;
-            aspect-ratio: 3 / 2; /* 宽高比 3:2，像信封 */
+            aspect-ratio: 3 / 2;
             background-color: #f5ead5;
             border-radius: 12px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.2), 0 2px 8px rgba(0,0,0,0.1);
-            /* 信封纸张纹理，可选 */
             background-image: linear-gradient(145deg, #f8f0df 0%, #efe3cb 100%);
             border: 1px solid #ddcfb5;
         }
 
-        /* 信封斜线：两条交叉线，模拟封口折痕 */
-        .envelope::before,
-        .envelope::after {
-            content: '';
+        /* 信封上的交叉线（SVG） */
+        .envelope-lines {
             position: absolute;
-            left: 15%;
-            width: 70%;
-            height: 2px;
-            background-color: #c5b397;
-            opacity: 0.7;
-            top: 50%;
-            transform-origin: center;
-            transform: translateY(-50%) rotate(45deg);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none; /* 不干扰点击 */
-        }
-
-        .envelope::after {
-            transform: translateY(-50%) rotate(-45deg);
+            z-index: 1;
         }
 
         /* 蜡封按钮（点击打开信封） */
@@ -87,34 +77,56 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
             width: 80px;
-            height: 80px;
             border: none;
             background: none;
             padding: 0;
             cursor: pointer;
             z-index: 10;
-            border-radius: 50%;
-            /* 轻阴影 */
             filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
             transition: transform 0.2s ease;
+            /* 核心：图片上半部分中心对齐信封中心，整体向上偏移75%自身高度 */
+            transform: translate(-50%, -75%);
         }
 
         .wax-seal-btn:hover {
-            transform: translate(-50%, -50%) scale(1.08);
+            transform: translate(-50%, -75%) scale(1.08);
         }
 
         .wax-seal-btn:active {
-            transform: translate(-50%, -50%) scale(0.95);
+            transform: translate(-50%, -75%) scale(0.95);
         }
 
         .wax-seal-btn img {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
+            height: auto;
             display: block;
+            pointer-events: none; /* 让按钮本身处理点击 */
+        }
+
+        /* 信封左上角标题 */
+        .envelope-title {
+            position: absolute;
+            top: 20px;
+            left: 25px;
+            font-size: 1.3em;
+            color: #5a4a3a;
+            letter-spacing: 2px;
+            font-weight: bold;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* 信封右上角寄件人 */
+        .envelope-sender {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 0.8em;
+            color: #8a7a6a;
+            letter-spacing: 1px;
+            pointer-events: none;
+            z-index: 2;
         }
 
         /* 邮票 */
@@ -133,6 +145,7 @@
             padding: 5px;
             box-sizing: border-box;
             pointer-events: none;
+            z-index: 2;
         }
 
         .stamp-inner {
@@ -163,41 +176,20 @@
             pointer-events: none;
             background-color: rgba(255,255,255,0.1);
             backdrop-filter: blur(2px);
+            z-index: 3;
         }
 
-        /* 信封底部小字（寄往） */
+        /* 信封底部小字 */
         .cover-footer {
             position: absolute;
-            bottom: -45px; /* 放在信封下方外部 */
+            bottom: -45px;
             width: 100%;
             text-align: center;
             font-size: 0.9em;
             color: #8a7a6a;
             letter-spacing: 2px;
             pointer-events: none;
-        }
-
-        /* 信封左上角标题 */
-        .envelope-title {
-            position: absolute;
-            top: 20px;
-            left: 25px;
-            font-size: 1.3em;
-            color: #5a4a3a;
-            letter-spacing: 2px;
-            font-weight: bold;
-            pointer-events: none;
-        }
-
-        /* 信封右上角寄件人 */
-        .envelope-sender {
-            position: absolute;
-            top: 20px;
-            right: 25px;
-            font-size: 0.8em;
-            color: #8a7a6a;
-            letter-spacing: 1px;
-            pointer-events: none;
+            z-index: 2;
         }
 
         /* ========== 文章内容样式 ========== */
@@ -281,6 +273,13 @@
     <!-- ========== 封面层 ========== -->
     <div id="cover">
         <div class="envelope">
+            <!-- 信封上的两条交叉线（SVG） -->
+            <svg class="envelope-lines" viewBox="0 0 300 200" preserveAspectRatio="none" aria-hidden="true">
+                <!-- 从左下角？注意：我们要从左上角和右上角到中心，所以坐标 (0,0) 到 (150,100)，(300,0) 到 (150,100) -->
+                <line x1="0" y1="0" x2="150" y2="100" stroke="#c5b397" stroke-width="2" stroke-opacity="0.7" />
+                <line x1="300" y1="0" x2="150" y2="100" stroke="#c5b397" stroke-width="2" stroke-opacity="0.7" />
+            </svg>
+
             <!-- 信封左上角标题 -->
             <div class="envelope-title">致水蜜桃</div>
             <!-- 信封右上角寄件人 -->
