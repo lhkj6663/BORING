@@ -179,11 +179,11 @@
             border-radius: 50%;
             border: 2px solid rgba(180, 100, 80, 0.6);
             display: flex;
+            flex-direction: column;      /* 纵向排列两行 */
             align-items: center;
             justify-content: center;
             color: rgba(180, 100, 80, 0.7);
-            /* 修改点：字体缩小，并禁止换行，确保单行显示 */
-            font-size: 0.4em;
+            font-size: 0.45em;           /* 缩小字体以适应两行 */
             font-weight: bold;
             letter-spacing: 0.5px;
             transform: rotate(-15deg);
@@ -327,7 +327,7 @@
             <div class="stamp">
                 <div class="stamp-inner">乌鲁木齐<br>2026.08</div>
             </div>
-            <!-- 邮戳 -->
+            <!-- 邮戳：改为两行 -->
             <div class="postmark">
                 <span>水蜜桃</span>
                 <span>收</span>
