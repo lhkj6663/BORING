@@ -15,15 +15,16 @@
             padding: 0 20px;
             line-height: 2.2;
             font-size: 1.15em;
-            overflow: hidden;
+            overflow: hidden; /* 初始禁止滚动 */
             min-height: 100vh;
         }
 
+        /* 封面关闭后允许滚动 */
         body.cover-closed {
             overflow: auto;
         }
 
-        /* ========== 封面层 ========== */
+        /* ========== 封面层（信封外壳） ========== */
         #cover {
             position: fixed;
             top: 0;
@@ -36,11 +37,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: transform 0.6s ease, opacity 0.6s ease;
+            transition: transform 0.7s ease, opacity 0.7s ease;
             opacity: 1;
             transform: translateY(0);
         }
 
+        /* 封面隐藏：向上滑出并淡出 */
         #cover.hidden {
             opacity: 0;
             transform: translateY(-100%);
@@ -56,54 +58,46 @@
             font-size: 0.9em;
             color: #8a7a6a;
             letter-spacing: 2px;
-            pointer-events: none; /* 不干扰点击 */
+            pointer-events: none;
         }
 
         /* 封面卡片 */
         .cover-card {
             position: relative;
             text-align: center;
-            padding: 40px 30px 30px;
-            max-width: 80%;
-            background-color: rgba(255, 255, 255, 0.65);
+            padding: 50px 30px 40px;
+            max-width: 85%;
+            background-color: rgba(255, 255, 255, 0.6);
             border-radius: 16px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.1);
             backdrop-filter: blur(4px);
-            /* 虚线边框 */
             border: 2px dashed rgba(160, 130, 100, 0.5);
+            margin: 20px;
+            box-sizing: border-box;
         }
 
-        /* 蜡封 */
+        /* 蜡封图片 */
         .wax-seal {
             position: absolute;
-            top: -25px;
+            top: -35px;
             left: 50%;
             transform: translateX(-50%);
-            width: 50px;
-            height: 50px;
-            background-color: #b53b3b;
-            border-radius: 50%;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2), inset 0 2px 5px rgba(255,255,255,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 1.5em;
-            font-weight: bold;
-            letter-spacing: 2px;
+            width: 70px;
+            height: 70px;
             pointer-events: none;
-            /* 轻微纹理，模拟火漆 */
-            background-image: radial-gradient(circle at 30% 30%, #d46a6a 0%, #b53b3b 60%, #8f2b2b 100%);
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+            /* 让图片居中填充圆形 */
+            object-fit: cover;
         }
 
         /* 封面标题 */
         .cover-card h1 {
             font-size: 1.8em;
-            margin-bottom: 0.5em;
+            margin: 15px 0 0.5em;
             color: #5a4a3a;
-            line-height: 1.5;
+            line-height: 1.4;
             text-shadow: 0 0 10px rgba(255,255,255,0.7);
-            margin-top: 10px;
         }
 
         /* 封面小字提示 */
@@ -135,7 +129,6 @@
             background-color: #c9a375;
             transform: scale(1.05);
         }
-
         .open-btn:active {
             transform: scale(0.97);
         }
@@ -143,8 +136,8 @@
         /* 邮票 */
         .stamp {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
+            bottom: 25px;
+            right: 25px;
             width: 80px;
             height: 100px;
             background-color: #fefefe;
@@ -152,7 +145,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* 邮票齿孔效果：用一圈虚线边框模拟 */
             border: 2px dashed #b0a090;
             padding: 5px;
             box-sizing: border-box;
@@ -170,8 +162,8 @@
         /* 邮戳 */
         .postmark {
             position: absolute;
-            bottom: 40px;
-            right: 30px;
+            bottom: 55px;
+            right: 35px;
             width: 70px;
             height: 70px;
             border-radius: 50%;
@@ -192,14 +184,18 @@
         /* ========== 文章内容样式 ========== */
         .content-wrapper {
             position: relative;
-            opacity: 0;
-            transition: opacity 0.5s ease;
+            opacity: 0; /* 初始隐藏 */
+            transform: translateY(30px); /* 初始下移，抽出时上移 */
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
 
+        /* 封面关闭后，文章显示 */
         body.cover-closed .content-wrapper {
             opacity: 1;
+            transform: translateY(0);
         }
 
+        /* 顶部大图 */
         .banner-img {
             width: 100%;
             max-width: 750px;
@@ -236,7 +232,7 @@
             font-size: 2.5em;
             margin-bottom: 0.2em;
             text-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
-            line-height: 1.0;
+            line-height: 1.0; /* 紧凑行距 */
         }
 
         header .meta {
@@ -268,8 +264,8 @@
     <!-- ========== 封面层 ========== -->
     <div id="cover">
         <div class="cover-card">
-            <!-- 蜡封 -->
-            <div class="wax-seal">启</div>
+            <!-- 蜡封图片（使用上传的 LaFeng.webp） -->
+            <img class="wax-seal" src="LaFeng.webp" alt="蜡封">
             <h1>致水蜜桃的一封信</h1>
             <p class="sub-text">轻轻点击打开信封</p>
             <button class="open-btn" id="openBtn">打开信封</button>
@@ -286,6 +282,7 @@
 
     <!-- ========== 文章内容层 ========== -->
     <div class="content-wrapper" id="article">
+        <!-- 【可修改】顶部图片路径 -->
         <img class="banner-img" id="banner" src="DSC_1396.webp?v=2" alt="顶部图片">
 
         <header>
