@@ -85,7 +85,6 @@
             z-index: 10;
             filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
             transition: transform 0.2s ease;
-            /* 核心：图片上半部分中心（25%高度）对准信封中心 */
             transform: translate(-50%, -25%);
         }
 
@@ -129,34 +128,34 @@
             margin-top: 2px;
         }
 
-        /* 信封倒三角内的寄件人（原右侧中间） */
+        /* 信封倒三角内的寄件人 */
         .envelope-sender {
             position: absolute;
-            top: 12%;                /* 倒三角内部靠上，避免与蜡封重叠 */
+            top: 12%;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.7em;        /* 字体缩小 */
+            font-size: 0.7em;
             color: #8a7a6a;
             letter-spacing: 1px;
             pointer-events: none;
             z-index: 2;
-            white-space: nowrap;     /* 保持一行 */
+            white-space: nowrap;
         }
 
-        /* 邮票：尺寸缩小30% */
+        /* 邮票 */
         .stamp {
             position: absolute;
             bottom: 20px;
             right: 20px;
-            width: 49px;            /* 原70px 的70% = 49px */
-            height: 63px;            /* 原90px 的70% = 63px */
+            width: 49px;
+            height: 63px;
             background-color: #fefefe;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
             display: flex;
             align-items: center;
             justify-content: center;
             border: 2px dashed #b0a090;
-            padding: 4px;            /* 略微缩小内边距 */
+            padding: 4px;
             box-sizing: border-box;
             pointer-events: none;
             z-index: 2;
@@ -164,28 +163,30 @@
 
         .stamp-inner {
             text-align: center;
-            font-size: 0.65em;      /* 字体相应缩小 */
+            font-size: 0.65em;
             color: #5a4a3a;
             line-height: 1.4;
             letter-spacing: 1px;
         }
 
-        /* 邮戳：尺寸缩小30% */
+        /* 邮戳 */
         .postmark {
             position: absolute;
             bottom: 50px;
             right: 30px;
-            width: 46px;            /* 原65px 的70% ≈ 46px */
+            width: 46px;
             height: 46px;
             border-radius: 50%;
-            border: 2px solid rgba(180, 100, 80, 0.6); /* 边框也稍微细一点 */
+            border: 2px solid rgba(180, 100, 80, 0.6);
             display: flex;
             align-items: center;
             justify-content: center;
             color: rgba(180, 100, 80, 0.7);
-            font-size: 0.6em;
+            /* 修改点：字体缩小，并禁止换行，确保单行显示 */
+            font-size: 0.5em;
             font-weight: bold;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
             transform: rotate(-15deg);
             pointer-events: none;
             background-color: rgba(255,255,255,0.1);
@@ -281,10 +282,10 @@
             text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         }
 
-        /* 针对手机屏幕的微调（可选） */
+        /* 针对手机屏幕的微调 */
         @media (max-width: 600px) {
             .envelope-sender {
-                font-size: 0.65em;  /* 手机上字体再小一点 */
+                font-size: 0.65em;
                 top: 10%;
             }
             .stamp {
@@ -380,9 +381,9 @@
         const mainTitle = document.getElementById('main-title');
         let ticking = false;
 
-        const finalOpacity = 0.2;       // 最终不透明度（透明度80%）
-        const gradientZone = 40;        // 主标题上方过渡区宽度（约1厘米）
-        const bottomFadeZone = 40;      // 底部完全透明渐变区宽度（约1厘米）
+        const finalOpacity = 0.2;
+        const gradientZone = 40;
+        const bottomFadeZone = 40;
 
         function updateBanner() {
             if (!banner || !mainTitle) return;
