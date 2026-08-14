@@ -15,64 +15,95 @@
             padding: 0 20px;
             line-height: 2.2;
             font-size: 1.15em;
-            /* 默认禁止滚动，防止封面被滚走 */
             overflow: hidden;
-            /* 页面高度足够，封面固定时不会露底 */
             min-height: 100vh;
         }
 
-        /* 当封面被关闭后，允许页面滚动 */
         body.cover-closed {
             overflow: auto;
         }
 
-        /* ========== 封面层（信封外壳） ========== */
+        /* ========== 封面层 ========== */
         #cover {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            /* 封面背景色，可以换 */
             background-color: #f3e9d2;
-            /* 背景渐变，让信封有点层次 */
             background-image: radial-gradient(circle at 50% 30%, #fdf6e3 0%, #eedcc0 100%);
             z-index: 100;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* 过渡动画：上滑 + 淡出 */
             transition: transform 0.6s ease, opacity 0.6s ease;
-            /* 保证初始可见 */
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* 封面隐藏时：向上滑出并淡出 */
         #cover.hidden {
             opacity: 0;
             transform: translateY(-100%);
-            pointer-events: none; /* 禁止点击 */
+            pointer-events: none;
         }
 
-        /* 封面中间的卡片 */
-        .cover-card {
+        /* 封面底部小字 */
+        .cover-footer {
+            position: absolute;
+            bottom: 25px;
+            width: 100%;
             text-align: center;
-            padding: 30px 20px;
+            font-size: 0.9em;
+            color: #8a7a6a;
+            letter-spacing: 2px;
+            pointer-events: none; /* 不干扰点击 */
+        }
+
+        /* 封面卡片 */
+        .cover-card {
+            position: relative;
+            text-align: center;
+            padding: 40px 30px 30px;
             max-width: 80%;
-            background-color: rgba(255, 255, 255, 0.6);
+            background-color: rgba(255, 255, 255, 0.65);
             border-radius: 16px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.1);
             backdrop-filter: blur(4px);
+            /* 虚线边框 */
+            border: 2px dashed rgba(160, 130, 100, 0.5);
+        }
+
+        /* 蜡封 */
+        .wax-seal {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background-color: #b53b3b;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2), inset 0 2px 5px rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5em;
+            font-weight: bold;
+            letter-spacing: 2px;
+            pointer-events: none;
+            /* 轻微纹理，模拟火漆 */
+            background-image: radial-gradient(circle at 30% 30%, #d46a6a 0%, #b53b3b 60%, #8f2b2b 100%);
         }
 
         /* 封面标题 */
         .cover-card h1 {
-            font-size: 2em;
+            font-size: 1.8em;
             margin-bottom: 0.5em;
             color: #5a4a3a;
             line-height: 1.5;
             text-shadow: 0 0 10px rgba(255,255,255,0.7);
+            margin-top: 10px;
         }
 
         /* 封面小字提示 */
@@ -95,6 +126,9 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transition: transform 0.2s, background-color 0.2s;
             letter-spacing: 2px;
+            margin-top: 10px;
+            position: relative;
+            z-index: 2;
         }
 
         .open-btn:hover {
@@ -106,10 +140,59 @@
             transform: scale(0.97);
         }
 
-        /* ========== 文章内容样式（基本沿用你之前调好的） ========== */
+        /* 邮票 */
+        .stamp {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 80px;
+            height: 100px;
+            background-color: #fefefe;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* 邮票齿孔效果：用一圈虚线边框模拟 */
+            border: 2px dashed #b0a090;
+            padding: 5px;
+            box-sizing: border-box;
+            pointer-events: none;
+        }
+
+        .stamp-inner {
+            text-align: center;
+            font-size: 0.8em;
+            color: #5a4a3a;
+            line-height: 1.4;
+            letter-spacing: 1px;
+        }
+
+        /* 邮戳 */
+        .postmark {
+            position: absolute;
+            bottom: 40px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid rgba(180, 100, 80, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(180, 100, 80, 0.7);
+            font-size: 0.75em;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transform: rotate(-15deg);
+            pointer-events: none;
+            background-color: rgba(255,255,255,0.1);
+            backdrop-filter: blur(2px);
+        }
+
+        /* ========== 文章内容样式 ========== */
         .content-wrapper {
             position: relative;
-            opacity: 0; /* 初始不可见，等封面关闭后淡入 */
+            opacity: 0;
             transition: opacity 0.5s ease;
         }
 
@@ -117,7 +200,6 @@
             opacity: 1;
         }
 
-        /* 顶部大图 */
         .banner-img {
             width: 100%;
             max-width: 750px;
@@ -154,7 +236,7 @@
             font-size: 2.5em;
             margin-bottom: 0.2em;
             text-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
-            line-height: 1.0; /* 紧凑行距 */
+            line-height: 1.0;
         }
 
         header .meta {
@@ -186,22 +268,27 @@
     <!-- ========== 封面层 ========== -->
     <div id="cover">
         <div class="cover-card">
-            <!-- 【可修改】封面主标题 -->
+            <!-- 蜡封 -->
+            <div class="wax-seal">启</div>
             <h1>致水蜜桃的一封信</h1>
-            <!-- 【可修改】封面小字提示 -->
             <p class="sub-text">轻轻点击打开信封</p>
-            <!-- 打开按钮 -->
             <button class="open-btn" id="openBtn">打开信封</button>
+            <!-- 邮票 -->
+            <div class="stamp">
+                <div class="stamp-inner">乌鲁木齐<br>2026.08</div>
+            </div>
+            <!-- 邮戳 -->
+            <div class="postmark">水蜜桃 收</div>
         </div>
+        <!-- 封面底部小字 -->
+        <div class="cover-footer">寄往：水蜜桃 收</div>
     </div>
 
     <!-- ========== 文章内容层 ========== -->
     <div class="content-wrapper" id="article">
-        <!-- 【可修改】顶部图片路径 -->
         <img class="banner-img" id="banner" src="DSC_1396.webp?v=2" alt="顶部图片">
 
         <header>
-            <!-- 两行标题，用 <br> 换行，id 唯一 -->
             <h1 id="main-title">就此别过<br>再见于山海</h1>
             <p class="meta">作者：摇子-小胖-彭煜翔 · 2026年8月</p>
         </header>
@@ -233,25 +320,18 @@
         const openBtn = document.getElementById('openBtn');
 
         openBtn.addEventListener('click', function() {
-            // 给封面添加 hidden 类，触发上滑淡出动画
             cover.classList.add('hidden');
-            // 允许页面滚动
             document.body.classList.add('cover-closed');
-            // 可选：等动画结束后让封面彻底不可见（但 CSS pointer-events 已处理）
-            // 不需要额外操作
         });
 
-        // ========== 图片滚动渐隐逻辑（保持之前的效果） ==========
+        // ========== 图片滚动渐隐逻辑 ==========
         const banner = document.getElementById('banner');
         const mainTitle = document.getElementById('main-title');
         let ticking = false;
 
-        // 最终不透明度：20%（即透明度80%）
-        const finalOpacity = 0.2;
-        // 主标题上方过渡区宽度（约1厘米）
-        const gradientZone = 40;
-        // 底部完全透明渐变区宽度（约1厘米）
-        const bottomFadeZone = 40;
+        const finalOpacity = 0.2;       // 最终不透明度（透明度80%）
+        const gradientZone = 40;        // 主标题上方过渡区宽度（约1厘米）
+        const bottomFadeZone = 40;      // 底部完全透明渐变区宽度（约1厘米）
 
         function updateBanner() {
             if (!banner || !mainTitle) return;
@@ -298,7 +378,6 @@
             }
         });
 
-        // 初始调用一次，但此时文章不可见，没问题
         updateBanner();
     </script>
 </body>
