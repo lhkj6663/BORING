@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>给可爱美丽水蜜桃的一封信</title>
     <style>
+        /* ========== 全局基础样式 ========== */
         body {
             background-color: #fdf6e3;
             color: #4a4a4a;
@@ -14,10 +15,106 @@
             padding: 0 20px;
             line-height: 2.2;
             font-size: 1.15em;
+            /* 默认禁止滚动，防止封面被滚走 */
+            overflow: hidden;
+            /* 页面高度足够，封面固定时不会露底 */
+            min-height: 100vh;
         }
 
+        /* 当封面被关闭后，允许页面滚动 */
+        body.cover-closed {
+            overflow: auto;
+        }
+
+        /* ========== 封面层（信封外壳） ========== */
+        #cover {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* 封面背景色，可以换 */
+            background-color: #f3e9d2;
+            /* 背景渐变，让信封有点层次 */
+            background-image: radial-gradient(circle at 50% 30%, #fdf6e3 0%, #eedcc0 100%);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* 过渡动画：上滑 + 淡出 */
+            transition: transform 0.6s ease, opacity 0.6s ease;
+            /* 保证初始可见 */
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 封面隐藏时：向上滑出并淡出 */
+        #cover.hidden {
+            opacity: 0;
+            transform: translateY(-100%);
+            pointer-events: none; /* 禁止点击 */
+        }
+
+        /* 封面中间的卡片 */
+        .cover-card {
+            text-align: center;
+            padding: 30px 20px;
+            max-width: 80%;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(4px);
+        }
+
+        /* 封面标题 */
+        .cover-card h1 {
+            font-size: 2em;
+            margin-bottom: 0.5em;
+            color: #5a4a3a;
+            line-height: 1.5;
+            text-shadow: 0 0 10px rgba(255,255,255,0.7);
+        }
+
+        /* 封面小字提示 */
+        .cover-card .sub-text {
+            font-size: 0.95em;
+            color: #8a7a6a;
+            margin-bottom: 2em;
+        }
+
+        /* 打开按钮 */
+        .open-btn {
+            display: inline-block;
+            padding: 14px 40px;
+            background-color: #d9b38c;
+            color: #fff;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s, background-color 0.2s;
+            letter-spacing: 2px;
+        }
+
+        .open-btn:hover {
+            background-color: #c9a375;
+            transform: scale(1.05);
+        }
+
+        .open-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* ========== 文章内容样式（基本沿用你之前调好的） ========== */
         .content-wrapper {
             position: relative;
+            opacity: 0; /* 初始不可见，等封面关闭后淡入 */
+            transition: opacity 0.5s ease;
+        }
+
+        body.cover-closed .content-wrapper {
+            opacity: 1;
         }
 
         /* 顶部大图 */
@@ -57,7 +154,7 @@
             font-size: 2.5em;
             margin-bottom: 0.2em;
             text-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
-            line-height: 1.0;
+            line-height: 1.0; /* 紧凑行距 */
         }
 
         header .meta {
@@ -85,12 +182,27 @@
     </style>
 </head>
 <body>
-    <div class="content-wrapper">
-        <img class="banner-img" id="banner" src="DSC_1396.webp?=2" alt="顶部图片">
+
+    <!-- ========== 封面层 ========== -->
+    <div id="cover">
+        <div class="cover-card">
+            <!-- 【可修改】封面主标题 -->
+            <h1>致水蜜桃的一封信</h1>
+            <!-- 【可修改】封面小字提示 -->
+            <p class="sub-text">轻轻点击打开信封</p>
+            <!-- 打开按钮 -->
+            <button class="open-btn" id="openBtn">打开信封</button>
+        </div>
+    </div>
+
+    <!-- ========== 文章内容层 ========== -->
+    <div class="content-wrapper" id="article">
+        <!-- 【可修改】顶部图片路径 -->
+        <img class="banner-img" id="banner" src="DSC_1396.webp?v=2" alt="顶部图片">
 
         <header>
-            <h1 id="main-title">就此别过</h1>
-            <h1 id="main-title">再见于山海</h1>
+            <!-- 两行标题，用 <br> 换行，id 唯一 -->
+            <h1 id="main-title">就此别过<br>再见于山海</h1>
             <p class="meta">作者：摇子-小胖-彭煜翔 · 2026年8月</p>
         </header>
 
@@ -116,6 +228,20 @@
     </div>
 
     <script>
+        // ========== 封面打开逻辑 ==========
+        const cover = document.getElementById('cover');
+        const openBtn = document.getElementById('openBtn');
+
+        openBtn.addEventListener('click', function() {
+            // 给封面添加 hidden 类，触发上滑淡出动画
+            cover.classList.add('hidden');
+            // 允许页面滚动
+            document.body.classList.add('cover-closed');
+            // 可选：等动画结束后让封面彻底不可见（但 CSS pointer-events 已处理）
+            // 不需要额外操作
+        });
+
+        // ========== 图片滚动渐隐逻辑（保持之前的效果） ==========
         const banner = document.getElementById('banner');
         const mainTitle = document.getElementById('main-title');
         let ticking = false;
@@ -130,38 +256,31 @@
         function updateBanner() {
             if (!banner || !mainTitle) return;
 
-            const titleTop = mainTitle.getBoundingClientRect().top; // 主标题顶部距离视口顶部
+            const titleTop = mainTitle.getBoundingClientRect().top;
             const bannerHeight = banner.offsetHeight;
-            const boundary = titleTop; // 主标题在图片上的位置（0 ~ bannerHeight 或更大）
+            const boundary = titleTop;
 
             let maskImage;
 
             if (boundary >= bannerHeight) {
-                // 主标题还在图片下方，图片完全显示
                 maskImage = 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 100%)';
             } else {
-                // 主标题已进入图片区域，计算上方不透明结束位置
                 const opaqueEnd = Math.max(0, boundary - gradientZone);
 
                 if (boundary <= bannerHeight / 2) {
-                    // 主标题已划过图片一半：底部 1 厘米区域从 20% 不透明度渐变到完全透明
-                    const bottomFadeStart = bannerHeight - bottomFadeZone; // 底部渐变开始位置
+                    const bottomFadeStart = bannerHeight - bottomFadeZone;
                     if (boundary <= 0) {
-                        // 主标题到顶部，整张图片都是 20% 不透明，底部 1 厘米渐变到完全透明
                         maskImage = 'linear-gradient(to bottom, rgba(0,0,0,' + finalOpacity + ') 0%, rgba(0,0,0,' + finalOpacity + ') ' + bottomFadeStart + 'px, rgba(0,0,0,0) 100%)';
                     } else {
-                        // 主标题在图片中部到顶部之间：上方不透明，过渡到 20%，底部再有 1 厘米完全透明渐变
                         maskImage = 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) ' + opaqueEnd + 'px, rgba(0,0,0,' + finalOpacity + ') ' + boundary + 'px, rgba(0,0,0,' + finalOpacity + ') ' + bottomFadeStart + 'px, rgba(0,0,0,0) 100%)';
                     }
                 } else {
-                    // 主标题还没划过图片一半：只有上方不透明，下方变为 20%，没有底部完全透明渐变
                     maskImage = 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) ' + opaqueEnd + 'px, rgba(0,0,0,' + finalOpacity + ') ' + boundary + 'px, rgba(0,0,0,' + finalOpacity + ') 100%)';
                 }
             }
 
             banner.style.maskImage = maskImage;
             banner.style.webkitMaskImage = maskImage;
-
             ticking = false;
         }
 
@@ -179,6 +298,7 @@
             }
         });
 
+        // 初始调用一次，但此时文章不可见，没问题
         updateBanner();
     </script>
 </body>
